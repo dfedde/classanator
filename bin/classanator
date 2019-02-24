@@ -1,0 +1,1 @@
+ruby -I$( dirname $0 )/../lib $( dirname $0 )/../exe/classanator $@

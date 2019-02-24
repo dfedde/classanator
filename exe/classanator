@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+require 'yaml'
+require 'classanator'
+require 'fileutils'
+
+manifest     = YAML::load_file('manifest.yml')
+slide_dir    = File.join('slides')
+template_dir = File.join('reveal')
+build_dir    = File.join('build')
+deck         = Classanator::Deck.new(manifest, slide_dir)
+
+def render_index(title, slides, file)
+  File.open(file) do |source_file|
+    contents = source_file.read
+    contents.gsub!(/\$SLIDES\$/, slides)
+    contents.gsub!(/\$TITLE\$/, title)
+    File.open(file, "w+") { |f| f.write(contents) }
+  end
+end
+
+case ARGV[0]
+when 'build'
+  FileUtils.mkdir_p(build_dir)
+  FileUtils.rm_rf(Dir.glob(File.join(build_dir, '*')))
+  FileUtils.cp_r(Dir.glob(File.join(template_dir, '*')), build_dir)
+  FileUtils.cp_r(File.join(slide_dir, 'assets'), build_dir)
+  render_index('title', deck.render, File.join(build_dir, 'index.html')) 
+when 'test'
+  deck.test
+else
+  puts 'plaese use build or test subcomads'
+end
+

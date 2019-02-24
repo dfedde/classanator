@@ -1,0 +1,14 @@
+Title: this is the class title
+slides:
+- file: title.md
+
+- goal: describe who we are
+  file: intoductions.md
+
+- file: sample_lab.md
+  ref: sample_lab
+  test: '[ 0 -eq 0 ]'
+
+# - file: sample_second_lab.md
+#   given: sample_lab
+#   test: '[ 0 -eq 0 ]' 
